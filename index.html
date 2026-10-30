@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KasRapi – Blueprint Tim Agen Pembukuan UMKM</title>
+<style>
+:root{--bg:#f7f6f2;--card:#fff;--text:#1d2320;--muted:#5d6762;--line:#e2e0d8;--accent:#0f7b5f;--accent-soft:#e3f3ee;--warn:#b4442b;--code:#f1efe8;color-scheme:light}
+@media (prefers-color-scheme:dark){:root{--bg:#141816;--card:#1c211f;--text:#eceee9;--muted:#a3aca7;--line:#2c3330;--accent:#4fc7a0;--accent-soft:#1d3a31;--warn:#f08a70;--code:#111513;color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:960px;margin:0 auto;padding:24px 16px 64px}
+header.hero{padding:40px 0 24px}
+header.hero h1{font-size:clamp(2rem,6vw,3.2rem);margin:0;color:var(--accent);letter-spacing:-.02em}
+header.hero p.tag{font-size:1.15rem;color:var(--muted);margin:.25rem 0 0}
+.pill{display:inline-block;background:var(--accent-soft);color:var(--accent);padding:2px 10px;border-radius:99px;font-size:.8rem;margin:12px 6px 0 0}
+nav{position:sticky;top:0;background:var(--bg);padding:10px 0;border-bottom:1px solid var(--line);z-index:5;display:flex;gap:14px;overflow-x:auto;white-space:nowrap}
+nav a{color:var(--muted);text-decoration:none;font-size:.9rem}
+nav a:hover{color:var(--accent)}
+section{margin-top:40px;scroll-margin-top:56px}
+h2{font-size:1.5rem;margin:0 0 14px}
+h3{font-size:1.1rem;margin:0 0 6px}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px}
+.card .sub{color:var(--muted);font-size:.9rem;margin:0 0 8px}
+.table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--card)}
+table{border-collapse:collapse;width:100%;min-width:480px}
+th,td{padding:10px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top;font-size:.92rem}
+th{color:var(--muted);font-weight:600;font-size:.8rem;text-transform:uppercase;letter-spacing:.04em}
+tr:last-child td{border-bottom:0}
+ul{margin:6px 0;padding-left:20px}
+li{margin:2px 0}
+.ok li::marker{color:var(--accent)}
+.no li::marker{color:var(--warn)}
+.label{font-size:.75rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-top:10px}
+details{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 16px;margin-top:10px}
+summary{cursor:pointer;font-weight:600}
+pre{background:var(--code);border-radius:10px;padding:14px;overflow-x:auto;font-size:.82rem;line-height:1.5;white-space:pre-wrap;word-break:break-word}
+button.copy{margin-top:8px;border:1px solid var(--line);background:var(--card);color:var(--text);padding:6px 12px;border-radius:8px;cursor:pointer;font-size:.85rem}
+button.copy:hover{border-color:var(--accent);color:var(--accent)}
+.flow{counter-reset:s;list-style:none;padding:0}
+.flow li{counter-increment:s;position:relative;padding:4px 0 4px 34px}
+.flow li::before{content:counter(s);position:absolute;left:0;top:4px;width:24px;height:24px;border-radius:50%;background:var(--accent-soft);color:var(--accent);font-size:.8rem;display:grid;place-items:center}
+.org{display:flex;flex-direction:column;align-items:center;gap:8px;margin:8px 0 4px}
+.org .node{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 18px;text-align:center}
+.org .node.top{border-color:var(--accent)}
+.org .row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.org .arrow{color:var(--muted)}
+.dl{display:inline-block;margin-top:16px;background:var(--accent);color:#fff;padding:8px 16px;border-radius:10px;text-decoration:none;font-size:.9rem}
+.dl:hover{opacity:.9}
+footer{margin-top:56px;color:var(--muted);font-size:.85rem;text-align:center}
+#err{display:none;background:var(--card);border:1px solid var(--warn);color:var(--warn);padding:16px;border-radius:12px;margin-top:24px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero" id="hero"></header>
+  <nav id="nav"></nav>
+  <div id="err"></div>
+  <main id="app"></main>
+  <footer id="foot"></footer>
+</div>
+
+<script type="application/json" id="data">{"meta": {"versi": "1.0", "tanggal": "2026-10-30", "model_bisnis": "Jasa admin & pembukuan UMKM yang dijalankan satu orang dengan tim agen AI", "harga_per_klien_per_bulan": {"min": 500000, "max": 2000000, "mata_uang": "IDR"}}, "solusi": {"nama": "KasRapi", "tagline": "Pembukuan rapi, pemilik tenang.", "alternatif_nama": ["BukuKita AI", "CatatIn", "NotaBeres"]}, "masalah": {"daftar": [{"masalah": "Nota dan struk menumpuk, hilang, atau tidak tercatat", "dampak": "Tidak tahu untung-rugi sebenarnya"}, {"masalah": "Uang usaha dan uang pribadi tercampur", "dampak": "Laba terlihat besar padahal sebenarnya kecil"}, {"masalah": "Pembukuan dikerjakan sendiri, malas atau tidak konsisten", "dampak": "Laporan telat atau tidak pernah ada"}, {"masalah": "Piutang dan utang lupa ditagih atau dibayar", "dampak": "Arus kas tersendat"}, {"masalah": "Tidak punya laporan untuk pengajuan KUR, pinjaman, atau evaluasi", "dampak": "Sulit berkembang"}, {"masalah": "Menyewa akuntan penuh waktu terlalu mahal", "dampak": "Akhirnya tidak ada yang mengurus"}], "inti": "Pemilik UMKM sibuk berjualan dan tidak punya waktu, biaya, atau keahlian untuk pembukuan rutin.", "janji_solusi": "Pemilik cukup mengirim foto nota lewat WhatsApp. Pencatatan, laporan bulanan, dan pengingat tagihan diurus tim agen, dengan pemilik bisnis jasa sebagai pemeriksa akhir."}, "tim": {"human_reviewer": "Pemilik bisnis jasa (kamu)", "agen": [{"id": "komandan", "nama": "Komandan", "peran": "Leader", "julukan": "Koordinator & Auditor", "tugas_utama": "Mengatur alur kerja, memeriksa kualitas hasil anggota, memutuskan apa yang perlu dilihat manusia.", "mengerjakan": ["Validasi hasil Scriba (confidence, total cocok, duplikat)", "Verifikasi ulang angka laporan Lapora", "Deteksi outlier", "Eskalasi ke manusia"], "dilarang": ["Mengekstrak nota", "Menyusun laporan sendiri"], "melapor_ke": "human_reviewer", "mengoordinasi": ["scriba", "lapora"], "prompt": "PERAN: Kamu Koordinator & Auditor tim pembukuan. Kamu TIDAK mengekstrak nota dan TIDAK menyusun laporan. Kamu mengatur alur, memeriksa hasil anggota, dan memutuskan apa yang perlu dilihat manusia.\n\nALUR KERJA:\nA. SAAT ADA NOTA/TRANSAKSI BARU\n  1. Teruskan input mentah ke Scriba.\n  2. Periksa hasilnya:\n     - Ada field penting null atau confidence < 0.8 → \"needs_human_review\"\n     - Kategori = \"TIDAK_JELAS\" → \"needs_human_review\"\n     - Jumlah item ≠ total nota → flag \"mismatch_total\"\n     - Duplikat (tanggal + pihak + nominal sama) → flag \"duplikat\"\n  3. Hanya transaksi yang lolos disimpan ke database klien.\n\nB. AKHIR BULAN (LAPORAN)\n  1. Kirim seluruh transaksi lolos periode itu ke Lapora (mode: laporan).\n  2. VERIFIKASI: hitung ulang total pendapatan, biaya, dan laba dari transaksi mentah (gunakan hasil node kalkulasi jika tersedia). Jika berbeda SEDIKIT PUN dengan laporan Lapora → status \"ditahan\", minta Lapora mengulang sekali. Jika masih beda → eskalasi manusia.\n  3. Cek outlier: nominal > 5x rata-rata kategori yang sama → catat di \"catatan_audit\".\n\nC. HARIAN (TAGIHAN)\n  1. Kirim daftar piutang/utang + tanggal hari ini ke Lapora (mode: tagihan).\n  2. Eskalasi ke manusia (jangan diproses otomatis) jika: terlambat > 30 hari, nominal > 5.000.000, atau ada catatan komplain.\n\nATURAN KERAS:\n- Tidak ada laporan atau pesan yang dikirim ke klien tanpa persetujuan manusia. Semua berstatus \"draf\".\n- Jika anggota mengembalikan format selain JSON skema, minta ulang. Jangan memperbaiki sendiri.\n\nOUTPUT:\n{\"klien\":\"\",\"mode\":\"pencatatan|laporan|tagihan\",\"status\":\"siap_review_manusia|ditahan\",\"needs_human_review\":[{\"id\":\"\",\"alasan\":\"\"}],\"catatan_audit\":[],\"ringkasan_untuk_manusia\":\"maks 50 kata\"}"}, {"id": "scriba", "nama": "Scriba", "peran": "Anggota 1", "julukan": "Pencatat nota dan transaksi", "tugas_utama": "Mengubah foto nota, struk, bukti transfer, dan chat pesanan menjadi transaksi terstruktur dan terkategori.", "mengerjakan": ["Membaca dokumen (OCR)", "Menyalin apa adanya", "Memilih kategori dari daftar baku", "Memberi flag jika ragu"], "dilarang": ["Membuat laporan", "Menghitung total periode", "Menebak data yang tidak terbaca"], "melapor_ke": "komandan", "prompt": "PERAN: Kamu hanya mengubah dokumen mentah (foto nota, struk, bukti transfer, chat pesanan) menjadi data transaksi terstruktur lalu memberi kategori. Kamu TIDAK membuat laporan dan TIDAK menghitung total periode.\n\nLANGKAH 1, EKSTRAKSI: salin persis seperti TERTULIS di dokumen.\nLANGKAH 2, KATEGORI: pilih HANYA dari daftar ini:\n PEMASUKAN: Penjualan, Pendapatan Lain\n PENGELUARAN: Bahan Baku, Gaji, Sewa, Listrik-Air-Internet, Transport, Pemasaran, Peralatan, Pajak, Prive, Lain-lain\n TIDAK_JELAS\n\nATURAN:\n- Angka buram/ambigu (misal 8 vs 3) → null + flag \"angka_tidak_terbaca: [field]\".\n- Tanggal tanpa tahun → null + flag \"tahun_tidak_ada\". Jangan menyimpulkan tahun.\n- Dua kategori sama masuk akal → \"TIDAK_JELAS\". Jangan menebak.\n- Belanja yang tampak pribadi → \"Prive\" + flag \"cek_apakah_pribadi\".\n- Jika \"aturan_klien\" diberikan, utamakan di atas logika umum.\n- Jangan menghitung ulang nominal. Salin apa adanya.\n\nSKEMA OUTPUT:\n{\n \"id_dokumen\":\"\",\n \"tanggal\":null,\n \"pihak\":null,\n \"no_nota\":null,\n \"items\":[{\"nama\":\"\",\"qty\":0,\"harga_satuan\":0,\"subtotal\":0}],\n \"diskon\":0,\n \"pajak\":0,\n \"total\":0,\n \"metode_bayar\":\"tunai|transfer|qris|null\",\n \"jenis\":\"pemasukan|pengeluaran\",\n \"kategori\":\"\",\n \"alasan_kategori\":\"maks 15 kata, kutip dari dokumen\",\n \"confidence\":0.0,\n \"flags\":[]\n}"}, {"id": "lapora", "nama": "Lapora", "peran": "Anggota 2", "julukan": "Penyusun laporan dan pengingat tagihan", "tugas_utama": "Menyusun laporan laba rugi bulanan dan draf pesan pengingat tagihan.", "mengerjakan": ["Mode laporan (rumus tetap)", "Mode tagihan (cek jatuh tempo, tulis draf WhatsApp)"], "dilarang": ["Mengubah data transaksi", "Mengkategorikan ulang", "Memberi saran bisnis", "Menyebut denda atau sanksi"], "melapor_ke": "komandan", "prompt": "PERAN: Kamu punya dua mode, ditentukan field \"mode\" di input. Kamu TIDAK mengubah data transaksi, TIDAK mengkategorikan ulang, dan TIDAK memberi saran bisnis.\n\n=== MODE \"laporan\" ===\nSusun Laba Rugi sederhana dari transaksi yang diberikan.\nRUMUS TETAP:\n- Total Pendapatan = jumlah semua kategori PEMASUKAN\n- Total Biaya = jumlah semua PENGELUARAN selain \"Prive\"\n- Laba Bersih = Total Pendapatan - Total Biaya\n- Prive dicatat terpisah, tidak mengurangi laba.\n- \"TIDAK_JELAS\" tidak dihitung; tampilkan terpisah.\n- Kategori kosong → 0, jangan diperkirakan.\n\nSKEMA:\n{\"mode\":\"laporan\",\"periode\":\"\",\"pendapatan\":{\"rincian\":[{\"kategori\":\"\",\"jumlah\":0}],\"total\":0},\"biaya\":{\"rincian\":[{\"kategori\":\"\",\"jumlah\":0}],\"total\":0},\"laba_bersih\":0,\"prive\":0,\"belum_diklasifikasi\":{\"jumlah_transaksi\":0,\"total_nominal\":0},\"jumlah_transaksi_dihitung\":0}\n\n=== MODE \"tagihan\" ===\nInput: tanggal_hari_ini + daftar [id, pihak, jenis(piutang|utang), nominal, tanggal_jatuh_tempo, status_bayar, no_rekening].\nLOGIKA TETAP: selisih_hari = jatuh_tempo - hari_ini\n- 1 s/d 3 → \"pengingat_dini\"\n- 0 → \"jatuh_tempo_hari_ini\"\n- < 0 → \"terlambat\" (sebutkan hari keterlambatan)\n- > 3 atau status lunas → abaikan\n- Tanggal kosong/tidak valid → \"data_bermasalah\", jangan dihitung.\n\nUntuk tiap item yang perlu tindakan, tulis draf WhatsApp:\n- Hanya pakai nama, nominal, tanggal, rekening dari input. Rekening kosong → \"[REKENING BELUM DIISI]\".\n- Maks 60 kata, sopan dan hangat. Nada: dini = ramah; hari ini = sopan langsung; terlambat = tegas tapi santun.\n- Dilarang menyebut denda, sanksi, atau konsekuensi hukum. Satu pesan satu tagihan.\n\nSKEMA:\n{\"mode\":\"tagihan\",\"perlu_tindakan\":[{\"id\":\"\",\"status\":\"\",\"hari_terlambat\":0,\"draf_pesan\":\"\"}],\"data_bermasalah\":[{\"id\":\"\",\"alasan\":\"\"}]}"}]}, "aturan_global_prompt": "ATURAN WAJIB:\n1. Gunakan HANYA data yang ada di input. Dilarang menebak atau mengarang.\n2. Data tidak ada/tidak terbaca → isi null dan tambahkan ke \"flags\". Jangan diisi perkiraan.\n3. Nominal Rupiah bilangan bulat tanpa simbol (contoh: 1500000). Tanggal YYYY-MM-DD.\n4. Output HANYA JSON valid sesuai skema. Tanpa penjelasan atau markdown.\n5. Sertakan \"confidence\" (0.0-1.0). Di bawah 0.8 wajib masuk \"flags\".\n6. Dilarang memberi nasihat pajak, hukum, atau investasi.\n7. Tugas di luar peran → balas {\"status\":\"out_of_scope\"}.", "alur_kerja": [{"nama": "Nota masuk", "frekuensi": "Real-time", "langkah": ["Klien kirim foto via WhatsApp", "Komandan meneruskan ke Scriba (ekstrak + kategori)", "Komandan memeriksa hasil", "Lolos: simpan ke database klien", "Tidak lolos: antrean review manusia"]}, {"nama": "Tagihan", "frekuensi": "Harian (pagi)", "langkah": ["Komandan kirim daftar + tanggal hari ini ke Lapora (mode tagihan)", "Komandan menyaring kasus eskalasi", "Draf masuk antrean persetujuan manusia", "Setelah disetujui, pesan dikirim"]}, {"nama": "Laporan", "frekuensi": "Akhir bulan", "langkah": ["Komandan kirim transaksi lolos ke Lapora (mode laporan)", "Komandan menghitung ulang dari data mentah", "Cocok: review manusia lalu kirim ke klien", "Beda: Lapora mengulang 1x, jika masih beda eskalasi ke manusia"]}], "aturan_kolaborasi": [{"aturan": "Satu arah lewat Komandan", "penjelasan": "Scriba dan Lapora tidak berkomunikasi langsung"}, {"aturan": "Pemisahan pembuat dan pemeriksa", "penjelasan": "Yang membuat tidak memeriksa dirinya sendiri"}, {"aturan": "Format JSON baku", "penjelasan": "Jika output bukan skema, Komandan meminta ulang, bukan memperbaiki"}, {"aturan": "Semua keluaran berstatus draf", "penjelasan": "Tidak ada yang sampai ke klien tanpa persetujuan manusia"}, {"aturan": "Pemicu eskalasi", "penjelasan": "Confidence < 0.8, kategori TIDAK_JELAS, total tidak cocok, nominal > Rp5 juta, piutang telat > 30 hari"}], "eskalasi": {"confidence_minimum": 0.8, "nominal_maksimum_otomatis": 5000000, "piutang_terlambat_hari": 30, "outlier_kelipatan_rata_rata": 5}, "kategori_akun": {"pemasukan": ["Penjualan", "Pendapatan Lain"], "pengeluaran": ["Bahan Baku", "Gaji", "Sewa", "Listrik-Air-Internet", "Transport", "Pemasaran", "Peralatan", "Pajak", "Prive", "Lain-lain"], "khusus": ["TIDAK_JELAS"]}, "memori": {"profil_klien": {"sifat": "Permanen, dibaca setiap kali", "isi": [{"data": "Identitas usaha", "contoh": "Nama, jenis usaha, tanggal mulai berlangganan", "dipakai_oleh": ["Semua"]}, {"data": "Aturan klien", "contoh": "Belanja di Toko Maju = Bahan Baku; Transfer dari Bu Ani = Penjualan", "dipakai_oleh": ["Scriba"]}, {"data": "Daftar pemasok dan pelanggan tetap", "contoh": "Nama, kategori default, kontak", "dipakai_oleh": ["Scriba", "Lapora"]}, {"data": "Rekening pembayaran klien", "contoh": "Nomor rekening untuk pesan tagihan", "dipakai_oleh": ["Lapora"]}, {"data": "Preferensi laporan", "contoh": "Format, tanggal cut-off bulanan, gaya bahasa pesan", "dipakai_oleh": ["Lapora"]}, {"data": "Catatan khusus", "contoh": "Pelanggan X pernah komplain; jangan tagih Pak Budi", "dipakai_oleh": ["Komandan", "Lapora"]}, {"data": "Ambang eskalasi per klien", "contoh": "Batas nominal, batas hari telat", "dipakai_oleh": ["Komandan"]}]}, "data_operasional": {"sifat": "Database, bukan memori model", "isi": [{"data": "Seluruh transaksi terkategori", "keterangan": "Satu sheet per klien, per bulan"}, {"data": "Daftar piutang dan utang", "keterangan": "Status belum bayar/lunas, tanggal jatuh tempo"}, {"data": "Arsip foto nota", "keterangan": "Link ke file asli untuk penelusuran"}, {"data": "Laporan bulanan final", "keterangan": "Versi yang sudah disetujui"}, {"data": "Log pesan tagihan", "keterangan": "Kapan dikirim, ke siapa, respons klien"}]}, "pembelajaran": {"sifat": "Terus bertambah", "isi": [{"data": "Koreksi dari reviewer", "manfaat": "Setiap koreksi kategori menjadi aturan klien baru sehingga Scriba makin akurat"}, {"data": "Riwayat flag dan penyebabnya", "manfaat": "Mengetahui pola nota yang sering bermasalah"}, {"data": "Kasus eskalasi dan keputusannya", "manfaat": "Acuan untuk kasus serupa"}, {"data": "Statistik akurasi per agen", "manfaat": "Persentase transaksi lolos tanpa koreksi"}]}, "jangan_disimpan": ["Nomor KTP, NPWP, PIN, atau password rekening", "Data klien A yang bisa terbaca saat memproses klien B (pisahkan memori per klien)", "Angka total hasil hitungan sebagai fakta tanpa sumber transaksi (selalu hitung ulang dari data mentah)"]}, "implementasi": {"teknologi": [{"komponen": "Orkestrasi", "saran": "n8n atau Make, satu workflow per mode"}, {"komponen": "OCR/Ekstraksi", "saran": "Model dengan kemampuan vision untuk Scriba"}, {"komponen": "Penyimpanan data", "saran": "Google Sheets atau Airtable, satu file per klien"}, {"komponen": "Input nota", "saran": "Klien kirim foto via grup WhatsApp, otomatis masuk ke Scriba"}, {"komponen": "Perhitungan angka", "saran": "Formula Sheets atau node Code di n8n, bukan dihitung model"}], "minim_halusinasi": ["Satu agen, satu tugas", "Output JSON dengan skema ketat", "null + flag lebih baik daripada tebakan", "Pembuat dan pemeriksa dipisah", "Rumus tetap di prompt, perhitungan pasti lewat kode/formula", "Human-in-the-loop untuk semua keluaran ke klien"], "catatan_risiko": ["OCR pada nota buram atau tulisan tangan tetap bisa keliru; pertahankan ambang confidence dan review manusia", "Layanan membantu pencatatan, bukan pengganti akuntan atau konsultan pajak; cantumkan di kontrak", "Lindungi data klien: pisahkan data per klien dan batasi akses"]}, "ringkasan": {"produk": "KasRapi", "target": "UMKM kuliner, retail, dan jasa dengan omzet kecil-menengah", "tim": "Komandan (leader), Scriba (pencatat), Lapora (pelapor)", "pengendali_akhir": "Pemilik bisnis jasa sebagai Human Reviewer", "prinsip": "Satu agen satu tugas, JSON baku, null lebih baik dari tebakan, semua draf", "memori_kunci": "Aturan klien, daftar pemasok/pelanggan, koreksi dari reviewer", "harga": "Rp500 ribu - Rp2 juta per klien per bulan"}}</script>
+<script>
+// Semua teks dimasukkan lewat textContent agar aman dari injeksi HTML.
+function el(tag, props, kids) {
+  var n = document.createElement(tag);
+  if (props) for (var k in props) {
+    if (k === 'text') n.textContent = props[k];
+    else if (k === 'class') n.className = props[k];
+    else n.setAttribute(k, props[k]);
+  }
+  (kids || []).forEach(function (c) { if (c) n.appendChild(typeof c === 'string' ? document.createTextNode(c) : c); });
+  return n;
+}
+function ul(items, cls) { return el('ul', { class: cls || '' }, items.map(function (t) { return el('li', { text: t }); })); }
+function table(heads, rows) {
+  var thead = el('thead', null, [el('tr', null, heads.map(function (h) { return el('th', { text: h }); }))]);
+  var tbody = el('tbody', null, rows.map(function (r) { return el('tr', null, r.map(function (c) { return el('td', { text: c }); })); }));
+  return el('div', { class: 'table-scroll' }, [el('table', null, [thead, tbody])]);
+}
+function section(id, title, kids) {
+  return el('section', { id: id }, [el('h2', { text: title })].concat(kids));
+}
+function promptBlock(title, text) {
+  var pre = el('pre', { text: text });
+  var btn = el('button', { class: 'copy', type: 'button', text: 'Salin prompt' });
+  btn.addEventListener('click', function () {
+    var done = function () { btn.textContent = 'Tersalin ✓'; setTimeout(function () { btn.textContent = 'Salin prompt'; }, 1800); };
+    if (navigator.clipboard) navigator.clipboard.writeText(text).then(done, function () {});
+  });
+  return el('details', null, [el('summary', { text: title }), pre, btn]);
+}
+
+function render(d) {
+  document.title = d.solusi.nama + ' – Blueprint Tim Agen Pembukuan UMKM';
+
+  var hero = document.getElementById('hero');
+  hero.appendChild(el('h1', { text: d.solusi.nama }));
+  hero.appendChild(el('p', { class: 'tag', text: d.solusi.tagline }));
+  hero.appendChild(el('p', { text: d.meta.model_bisnis }));
+  var h = d.meta.harga_per_klien_per_bulan;
+  hero.appendChild(el('span', { class: 'pill', text: 'Harga: Rp' + h.min.toLocaleString('id-ID') + ' – Rp' + h.max.toLocaleString('id-ID') + ' / klien / bulan' }));
+  hero.appendChild(el('span', { class: 'pill', text: 'Versi ' + d.meta.versi }));
+  hero.appendChild(el('br'));
+  var dl = el('a', { class: 'dl', href: URL.createObjectURL(new Blob([JSON.stringify(d, null, 2)], { type: 'application/json' })), download: 'kasrapi.json', text: 'Unduh JSON' });
+  hero.appendChild(dl);
+
+  var nav = document.getElementById('nav');
+  [['masalah', 'Masalah'], ['tim', 'Tim Agen'], ['alur', 'Alur Kerja'], ['memori', 'Memori'], ['implementasi', 'Implementasi'], ['prompt', 'Prompt'], ['ringkasan', 'Ringkasan']]
+    .forEach(function (p) { nav.appendChild(el('a', { href: '#' + p[0], text: p[1] })); });
+
+  var app = document.getElementById('app');
+
+  // Masalah
+  app.appendChild(section('masalah', 'Masalah yang Ditangani', [
+    table(['Masalah UMKM', 'Dampak'], d.masalah.daftar.map(function (m) { return [m.masalah, m.dampak]; })),
+    el('p', null, [el('strong', { text: 'Inti masalah: ' }), d.masalah.inti]),
+    el('p', null, [el('strong', { text: 'Janji solusi: ' }), d.masalah.janji_solusi])
+  ]));
+
+  // Tim
+  var agen = d.tim.agen;
+  var org = el('div', { class: 'org' }, [
+    el('div', { class: 'node top', text: d.tim.human_reviewer + ' (Human Reviewer)' }),
+    el('div', { class: 'arrow', text: '↓' }),
+    el('div', { class: 'node', text: agen[0].nama + ' · ' + agen[0].julukan }),
+    el('div', { class: 'arrow', text: '↓' }),
+    el('div', { class: 'row' }, agen.slice(1).map(function (a) { return el('div', { class: 'node', text: a.nama + ' · ' + a.julukan }); }))
+  ]);
+  var cards = agen.map(function (a) {
+    return el('div', { class: 'card' }, [
+      el('h3', { text: a.nama }),
+      el('p', { class: 'sub', text: a.peran + ' · ' + a.julukan }),
+      el('p', { text: a.tugas_utama }),
+      el('div', { class: 'label', text: 'Mengerjakan' }), ul(a.mengerjakan, 'ok'),
+      el('div', { class: 'label', text: 'Dilarang' }), ul(a.dilarang, 'no')
+    ]);
+  });
+  app.appendChild(section('tim', 'Tim Agen (1 Leader + 2 Anggota)', [org, el('div', { class: 'grid' }, cards),
+    el('h3', { text: 'Aturan Kolaborasi', style: 'margin-top:24px' }),
+    table(['Aturan', 'Penjelasan'], d.aturan_kolaborasi.map(function (a) { return [a.aturan, a.penjelasan]; }))
+  ]));
+
+  // Alur
+  app.appendChild(section('alur', 'Alur Kerja', [el('div', { class: 'grid' }, d.alur_kerja.map(function (f) {
+    return el('div', { class: 'card' }, [el('h3', { text: f.nama }), el('p', { class: 'sub', text: f.frekuensi }),
+      el('ol', { class: 'flow' }, f.langkah.map(function (s) { return el('li', { text: s }); }))]);
+  }))]));
+
+  // Memori
+  var m = d.memori;
+  app.appendChild(section('memori', 'Yang Perlu Disimpan di Memori', [
+    el('h3', { text: 'A. Profil Klien · ' + m.profil_klien.sifat }),
+    table(['Data', 'Contoh', 'Dipakai oleh'], m.profil_klien.isi.map(function (i) { return [i.data, i.contoh, i.dipakai_oleh.join(', ')]; })),
+    el('h3', { text: 'B. Data Operasional · ' + m.data_operasional.sifat, style: 'margin-top:20px' }),
+    table(['Data', 'Keterangan'], m.data_operasional.isi.map(function (i) { return [i.data, i.keterangan]; })),
+    el('h3', { text: 'C. Pembelajaran · ' + m.pembelajaran.sifat, style: 'margin-top:20px' }),
+    table(['Data', 'Manfaat'], m.pembelajaran.isi.map(function (i) { return [i.data, i.manfaat]; })),
+    el('h3', { text: 'Jangan Disimpan', style: 'margin-top:20px' }), ul(m.jangan_disimpan, 'no')
+  ]));
+
+  // Implementasi
+  var im = d.implementasi;
+  app.appendChild(section('implementasi', 'Implementasi', [
+    table(['Komponen', 'Saran'], im.teknologi.map(function (t) { return [t.komponen, t.saran]; })),
+    el('h3', { text: 'Mengapa Minim Halusinasi', style: 'margin-top:20px' }), ul(im.minim_halusinasi, 'ok'),
+    el('h3', { text: 'Catatan Risiko', style: 'margin-top:20px' }), ul(im.catatan_risiko, 'no')
+  ]));
+
+  // Prompt
+  var pk = [promptBlock('Aturan Global (tempel di awal semua prompt)', d.aturan_global_prompt)];
+  agen.forEach(function (a) { pk.push(promptBlock('Prompt ' + a.nama + ' (' + a.peran + ')', a.prompt)); });
+  app.appendChild(section('prompt', 'Prompt Lengkap Tiap Agen', pk));
+
+  // Ringkasan
+  var r = d.ringkasan;
+  app.appendChild(section('ringkasan', 'Ringkasan Satu Halaman', [
+    table(['Elemen', 'Isi'], Object.keys(r).map(function (k) { return [k.replace(/_/g, ' '), r[k]]; }))
+  ]));
+
+  document.getElementById('foot').textContent = d.solusi.nama + ' · Blueprint v' + d.meta.versi + ' · ' + d.meta.tanggal;
+}
+
+try {
+  var raw = document.getElementById('data').textContent;
+  render(JSON.parse(raw));
+} catch (e) {
+  var box = document.getElementById('err');
+  box.style.display = 'block';
+  box.textContent = 'Gagal menampilkan data: ' + e.message;
+}
+</script>
+</body>
+</html>
